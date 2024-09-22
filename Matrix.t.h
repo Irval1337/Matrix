@@ -73,7 +73,7 @@ Matrix<T>& Matrix<T>::ForEach(std::function<void(size_t, size_t, T&)> func) {
 }
 
 template<arithmetic T>
-Matrix<T>& Matrix<T>::ForRow(int row, std::function<void(size_t, T&)> func) {
+Matrix<T>& Matrix<T>::ForRow(size_t row, std::function<void(size_t, T&)> func) {
     for(size_t col = 0; col < cols_; ++col) {
         func(col, data_[row][col]);
     }
@@ -81,7 +81,7 @@ Matrix<T>& Matrix<T>::ForRow(int row, std::function<void(size_t, T&)> func) {
 }
 
 template<arithmetic T>
-Matrix<T>& Matrix<T>::ForColumn(int col, std::function<void(size_t, T&)> func) {
+Matrix<T>& Matrix<T>::ForColumn(size_t col, std::function<void(size_t, T&)> func) {
     for(size_t row = 0; row < rows_; ++row) {
         func(row, data_[row][col]);
     }

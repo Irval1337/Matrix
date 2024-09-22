@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Matrix.t.h"
+#include "LinearEquationSystem.h"
 
 using namespace std;
 
@@ -8,20 +8,56 @@ Matrix<double> g() {
 }
 
 int main() {
-    auto gay = g();
-    Matrix<int> mat = gay;
-    auto mat2 = Matrix<int>(5, 5);
-    swap(mat, mat2);
-    auto t = -g() * 5;
-    cout << (t / 2).ForColumn(1, [](size_t i, double& elem) {
-        elem = 0;
-    }) << endl << endl;
-    Matrix<int> bruh = {{ 1, 2, 3 }};
-    Matrix<double> hah = {{ 0.5, 0.5, 0.5 }};
-    cout << (hah + bruh).Transpose() << endl;
-    cout << Matrix<int>({
-        {1, 2, 3},
-        {4, 5, 6},
-        {7, 8, 9}
-    }).Trace();
+    LinearEquationSystem sys = {{
+        {-4, 3, -3, 5},
+        {6, 0, -18, 6},
+        {-8, 6, -6, 10},
+        {1, -4, 17, -11}
+        }, {
+        {9},
+        {-18},
+        {18},
+        {1}
+        }
+    };
+    sys.Solve();
+    cout << sys << endl << endl;
+
+    auto solutions = sys.GetSolutions();
+    if (solutions.empty()) {
+        cout << "No solutions";
+        return 0;
+    }
+    for(const auto& solution : solutions) {
+        if (solution.variable.coeff == -1) {
+            cout << "-";
+        } else if (solution.variable.coeff != 1) {
+            cout << solution.variable.coeff << "*";
+        }
+        cout << "x_" << solution.variable.var_index << " = ";
+
+        bool is_first = true;
+        for(const auto& var : solution.expression) {
+            if (is_first && var.coeff < 0) {
+                cout << "-";
+            } else if (!is_first && var.coeff < 0) {
+                cout << " - ";
+            } else if (!is_first && var.coeff > 0) {
+                cout << " + ";
+            }
+
+            if (var.var_index == 0) {
+                cout << abs(var.coeff);
+                continue;
+            }
+
+            if (abs(var.coeff) != 1) {
+                cout << abs(var.coeff) << "*";
+            }
+            cout << "x_" << var.var_index;
+            is_first = false;
+        }
+        cout << endl;
+    }
+
 }

@@ -147,9 +147,9 @@ public:
 
     Matrix<T>& ForEach(std::function<void(size_t, size_t, T&)> func);
 
-    Matrix<T>& ForRow(int row, std::function<void(size_t, T&)> func);
+    Matrix<T>& ForRow(size_t row, std::function<void(size_t, T&)> func);
 
-    Matrix<T>& ForColumn(int col, std::function<void(size_t, T&)> func);
+    Matrix<T>& ForColumn(size_t col, std::function<void(size_t, T&)> func);
 
     T Trace() const noexcept;
 

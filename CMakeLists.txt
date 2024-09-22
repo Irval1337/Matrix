@@ -6,4 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(Matrix main.cpp
         Matrix.t.h
         Matrix.h
+        LinearEquationSystem.cpp
+        LinearEquationSystem.h
 )
