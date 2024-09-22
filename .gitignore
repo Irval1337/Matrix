@@ -1,32 +1,26 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
+*~
+*#
+a.out
 *.out
-*.app
+*.a
+*.o
+.vscode/
+build
+release*
+tsan*
+asan*
+__pycache__
+.doit.db
+.idea
+perf.data*
+cmake-*
+.submit-repo/
+CMakeLists.txt.user
+CMakeSettings.json
+CppProperties.json
+.vs/
+build_asan
+.DS_Store
+.cache/
+*.pdf
+compile_commands.json
