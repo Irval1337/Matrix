@@ -3,10 +3,6 @@
 
 using namespace std;
 
-Matrix<double> g() {
-    return {{1, 2, 3}, {4, 5, 6}};
-}
-
 int main() {
     LinearEquationSystem sys = {{
         {-4, 3, -3, 5},

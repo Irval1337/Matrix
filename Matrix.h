@@ -153,7 +153,7 @@ public:
 
     T Trace() const noexcept;
 
-    Matrix<T> Transpose() const noexcept;
+    Matrix<T> Transposed() const noexcept;
 
 #pragma Friends
     template<arithmetic U, arithmetic V>

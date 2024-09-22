@@ -1,10 +1,10 @@
 #include "LinearEquationSystem.h"
 
 std::ostream& operator<<(std::ostream& out, const LinearEquationSystem& matrix) {
-    int need_width = 0;
+    int32_t need_width = 0;
     for(const auto& row : matrix.data_) {
         for(const auto& element : row) {
-            need_width = std::max(need_width, (int)std::format("{}", element).size());
+            need_width = std::max(need_width, static_cast<int32_t>(std::format("{}", element).size()));
         }
     }
     for (size_t i = 0; i < matrix.data_.size(); ++i) {
@@ -45,7 +45,7 @@ void LinearEquationSystem::SwapRows(size_t i, size_t j) noexcept {
 }
 
 void LinearEquationSystem::SimplifyRow(size_t row) noexcept {
-    int gcd_ = 0;
+    int32_t gcd_ = 0;
     bool is_minus = false;
     ForRow(row, [&](size_t col, double& elem) {
        if (IsZero(elem)) {
@@ -59,7 +59,7 @@ void LinearEquationSystem::SimplifyRow(size_t row) noexcept {
         if (elem < 0 && gcd_ == 0) {
             is_minus = true;
         }
-       gcd_ = std::gcd(gcd_, static_cast<int>(std::abs(elem)));
+       gcd_ = std::gcd(gcd_, static_cast<int32_t>(std::abs(elem)));
 
     });
     if (is_minus) {
@@ -77,10 +77,10 @@ void LinearEquationSystem::SimplifyRow(size_t row) noexcept {
 void LinearEquationSystem::MakeStepwise() noexcept {
     size_t upper_row = 0;
     for(size_t column = 0; column + 1 < cols_; ++column) {
-        int row_num = -1;
+        int32_t row_num = -1;
         for(size_t row = upper_row; row < rows_; ++row) {
             if (!IsZero(data_[row][column])) {
-                row_num = static_cast<int>(row);
+                row_num = static_cast<int32_t>(row);
                 break;
             }
         }
@@ -89,10 +89,10 @@ void LinearEquationSystem::MakeStepwise() noexcept {
         }
         SwapRows(upper_row, row_num);
         for(size_t row = upper_row + 1; row < rows_; ++row)  {
-            int gcd_ = 1;
+            int32_t gcd_ = 1;
             double leading = data_[row][column];
             if (IsInteger(data_[upper_row][column]) && IsInteger(leading)) {
-                gcd_ = std::gcd(static_cast<int>(data_[upper_row][column]), static_cast<int>(leading));
+                gcd_ = std::gcd(static_cast<int32_t>(data_[upper_row][column]), static_cast<int32_t>(leading));
             }
             ForRow(row, [&](size_t j, double& elem) {
                 elem = elem * data_[upper_row][column] / gcd_ - data_[upper_row][j] * leading / gcd_;
@@ -123,9 +123,9 @@ void LinearEquationSystem::MakeBetterStepwise() noexcept {
             if (IsZero(leading)) {
                 continue;
             }
-            int gcd_ = 1;
+            int32_t gcd_ = 1;
             if (IsInteger(data_[row][non_zeros[row]]) && IsInteger(leading)) {
-                gcd_ = std::gcd(static_cast<int>(data_[row][non_zeros[row]]), static_cast<int>(leading));
+                gcd_ = std::gcd(static_cast<int32_t>(data_[row][non_zeros[row]]), static_cast<int32_t>(leading));
             }
             ForRow(other, [&](size_t col, double& elem) {
                 elem = elem * data_[row][non_zeros[row]] / gcd_ - data_[row][col] * leading / gcd_;

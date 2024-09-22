@@ -3,18 +3,19 @@
 #include "Matrix.t.h"
 #include <numeric>
 #include <utility>
+#include <cstdint>
 
 struct ExpressionPart {
     double coeff;
-    int var_index;
-    ExpressionPart(double coeff_, int var_index_) : coeff(coeff_), var_index(var_index_) { }
+    int32_t var_index;
+    ExpressionPart(double coeff_, int32_t var_index_) : coeff(coeff_), var_index(var_index_) { }
 };
 
 struct LinearSolution {
     ExpressionPart variable;
     std::vector<ExpressionPart> expression;
 
-    explicit LinearSolution(double coeff, int ind) : variable(coeff, ind) { }
+    explicit LinearSolution(double coeff, int32_t ind) : variable(coeff, ind) { }
 };
 
 class LinearEquationSystem : Matrix<double> {
@@ -51,6 +52,6 @@ private:
     }
 
     [[nodiscard]] bool IsInteger(const double& val) const noexcept {
-        return IsZero(val - static_cast<int>(val));
+        return IsZero(val - static_cast<int32_t>(val));
     }
 };

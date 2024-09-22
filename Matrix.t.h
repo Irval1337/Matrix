@@ -114,7 +114,7 @@ T Matrix<T>::Trace() const noexcept {
 }
 
 template<arithmetic T>
-Matrix<T> Matrix<T>::Transpose() const noexcept {
+Matrix<T> Matrix<T>::Transposed() const noexcept {
     Matrix<T> mat(cols_, rows_);
     return mat.ForEach([&](size_t i, size_t j, T& elem) {
         elem = this->data_[j][i];
