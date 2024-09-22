@@ -13,7 +13,9 @@ int main() {
     auto mat2 = Matrix<int>(5, 5);
     swap(mat, mat2);
     auto t = -g() * 5;
-    cout << t / 2 << endl << endl;
+    cout << (t / 2).ForColumn(1, [](size_t i, double& elem) {
+        elem = 0;
+    }) << endl << endl;
     Matrix<int> bruh = {{ 1, 2, 3 }};
     Matrix<double> hah = {{ 0.5, 0.5, 0.5 }};
     cout << (hah + bruh).Transpose() << endl;

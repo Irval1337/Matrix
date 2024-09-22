@@ -1,5 +1,0 @@
-# ninja log v6
-4	1348	7486533686989141	CMakeFiles/Matrix.dir/main.cpp.obj	97da110c5f60cb4e
-1348	1668	7486533700429157	Matrix.exe	5231f66ec99a9c51
-11	386	7486401225900748	CMakeFiles/Matrix.dir/Matrix.cpp.obj	ec1a2284d395a64e
-1	201	7486534343446269	build.ninja	823c7ce6276b2c42

@@ -63,14 +63,29 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
 }
 
 template<arithmetic T>
-Matrix<T> Matrix<T>::ForEach(std::function<void(size_t, size_t, T&)> func) const {
-    Matrix<T> mat = *this;
+Matrix<T>& Matrix<T>::ForEach(std::function<void(size_t, size_t, T&)> func) {
     for(size_t i = 0; i < rows_; ++i) {
         for(size_t j = 0; j < cols_; ++j) {
-            func(i, j, mat.data_[i][j]);
+            func(i, j, data_[i][j]);
         }
     }
-    return mat;
+    return *this;
+}
+
+template<arithmetic T>
+Matrix<T>& Matrix<T>::ForRow(int row, std::function<void(size_t, T&)> func) {
+    for(size_t col = 0; col < cols_; ++col) {
+        func(col, data_[row][col]);
+    }
+    return *this;
+}
+
+template<arithmetic T>
+Matrix<T>& Matrix<T>::ForColumn(int col, std::function<void(size_t, T&)> func) {
+    for(size_t row = 0; row < rows_; ++row) {
+        func(row, data_[row][col]);
+    }
+    return *this;
 }
 
 template<arithmetic T, arithmetic U>
@@ -92,11 +107,9 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
 template<arithmetic T>
 T Matrix<T>::Trace() const noexcept {
     T result = 0;
-    ForEach([&](size_t i, size_t j, T& elem) {
-        if (i == j) {
-            result += elem;
-        }
-    });
+    for(size_t i = 0; i < std::min(rows_, cols_); ++i) {
+        result += data_[i][i];
+    }
     return result;
 }
 
@@ -130,9 +143,10 @@ Matrix<T> pow(const Matrix<T>& matrix, size_t power) {
     }
     if (power == 0) {
         Matrix<T> mat = Matrix<T>(matrix.rows_, matrix.rows_);
-        return mat.ForEach([](size_t i, size_t j, T& elem) {
-            elem = static_cast<T>(i == j);
-        });
+        for(size_t i = 0; i < matrix.rows_; ++i) {
+            matrix.data_[i][i] = 1;
+        }
+        return mat;
     }
     if (power & 1) {
         return matrix * pow(matrix, power - 1);

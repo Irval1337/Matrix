@@ -4,7 +4,8 @@
 #include <utility>
 #include <iostream>
 #include <functional>
-#include "MatrixIterator.h"
+
+template <typename T> concept arithmetic = std::is_arithmetic_v<T>;
 
 template<arithmetic T>
 class Matrix {
@@ -14,8 +15,6 @@ public:
 
     explicit Matrix(const std::vector<std::vector<T>>& other) : data_(other), rows_(other.size()) {
         FitMatrix();
-        auto t = other[0].begin();
-        t++;
     }
 
     Matrix(const size_t rows, const size_t cols) : rows_(rows), cols_(cols) {
@@ -83,7 +82,8 @@ public:
     bool operator!=(const Matrix<T>& other) const noexcept;
 
     Matrix<T> operator-() const {
-        return ForEach([](size_t i, size_t j, T& elem) {
+        Matrix<T> mat = *this;
+        return mat.ForEach([](size_t i, size_t j, T& elem) {
             elem = -elem;
         });
     }
@@ -94,13 +94,15 @@ public:
 
     template<arithmetic U>
     Matrix<T> operator*(U scalar) const noexcept {
-        return ForEach([&](size_t i, size_t j, T& elem) {
+        Matrix<T> mat = *this;
+        return mat.ForEach([&](size_t i, size_t j, T& elem) {
             elem = elem * scalar;
         });
     }
 
     Matrix<T> operator/(T scalar) const {
-        return ForEach([&](size_t i, size_t j, T& elem) {
+        Matrix<T> mat = *this;
+        return mat.ForEach([&](size_t i, size_t j, T& elem) {
             elem = elem / scalar;
         });
     }
@@ -143,7 +145,11 @@ public:
     }
 #pragma endregion
 
-    Matrix<T> ForEach(std::function<void(size_t, size_t, T&)> func) const;
+    Matrix<T>& ForEach(std::function<void(size_t, size_t, T&)> func);
+
+    Matrix<T>& ForRow(int row, std::function<void(size_t, T&)> func);
+
+    Matrix<T>& ForColumn(int col, std::function<void(size_t, T&)> func);
 
     T Trace() const noexcept;
 
