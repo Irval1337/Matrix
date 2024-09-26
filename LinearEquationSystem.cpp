@@ -158,7 +158,7 @@ std::vector<LinearSolution> LinearEquationSystem::GetSolutions() const noexcept 
                     solutions.back().expression.emplace_back(-data_[row][var_col], var_col + 1);
                 }
             }
-            if (!IsZero(data_[row][cols_ - 1])) {
+            if (!IsZero(data_[row][cols_ - 1]) || solutions.back().expression.empty()) {
                 solutions.back().expression.emplace_back(data_[row][cols_ - 1], 0);
             }
             break;
