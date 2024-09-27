@@ -4,18 +4,16 @@
 using namespace std;
 
 int main() {
-    LinearEquationSystem sys = {{
-        {-4, 3, -3, 5},
-        {6, 0, -18, 6},
-        {-8, 6, -6, 10},
-        {1, -4, 17, -11}
-        }, {
-        {9},
-        {-18},
-        {18},
-        {1}
+    srand(time(0));
+    int N = 20;
+    Matrix<int> A(N, N), B(N, 1);
+    for (int i = 0; i < N; ++i) {
+        for (int j = 0; j < N; ++j) {
+            A(i, j) = rand() % 100;
         }
-    };
+        B(i, 0) = rand() % 100;
+    }
+    LinearEquationSystem sys = {A, B};
     sys.Solve();
     cout << sys << endl << endl;
 
@@ -24,7 +22,7 @@ int main() {
         cout << "No solutions";
         return 0;
     }
-    for(const auto& solution : solutions) {
+    for (const auto &solution: solutions) {
         if (solution.variable.coeff == -1) {
             cout << "-";
         } else if (solution.variable.coeff != 1) {
@@ -33,7 +31,7 @@ int main() {
         cout << "x_" << solution.variable.var_index << " = ";
 
         bool is_first = true;
-        for(const auto& var : solution.expression) {
+        for (const auto &var: solution.expression) {
             if (is_first && var.coeff < 0) {
                 cout << "-";
             } else if (!is_first && var.coeff < 0) {
@@ -55,5 +53,4 @@ int main() {
         }
         cout << endl;
     }
-
 }

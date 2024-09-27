@@ -4,7 +4,7 @@
 #include <format>
 #include "Matrix.h"
 
-template<arithmetic T>
+template<class T>
 void Matrix<T>::FitMatrix() {
     size_t max_col = 0;
     for (const auto& row : data_) {
@@ -17,7 +17,7 @@ void Matrix<T>::FitMatrix() {
     }
 }
 
-template<arithmetic T>
+template<class T>
 bool Matrix<T>::operator==(const Matrix<T>& other) const noexcept {
     if (rows_ != other.rows_ || cols_ != other.cols_) return false;
     for (size_t i = 0; i < rows_; ++i) {
@@ -28,19 +28,19 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const noexcept {
     return true;
 }
 
-template<arithmetic T>
+template<class T>
 bool Matrix<T>::operator!=(const Matrix<T>& other) const noexcept {
     return !(*this == other);
 }
 
-template<arithmetic T>
+template<class T>
 void swap(Matrix<T>& lhs, Matrix<T>& rhs) {
     std::swap(lhs.rows_, rhs.rows_);
     std::swap(lhs.cols_, rhs.cols_);
     std::swap(lhs.data_, rhs.data_);
 }
 
-template<arithmetic T>
+template<class T>
 std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
     int need_width = 0;
     for(const auto& row : matrix.data_) {
@@ -62,7 +62,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
     return out;
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T>& Matrix<T>::ForEach(std::function<void(size_t, size_t, T&)> func) {
     for(size_t i = 0; i < rows_; ++i) {
         for(size_t j = 0; j < cols_; ++j) {
@@ -72,7 +72,7 @@ Matrix<T>& Matrix<T>::ForEach(std::function<void(size_t, size_t, T&)> func) {
     return *this;
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T>& Matrix<T>::ForRow(size_t row, std::function<void(size_t, T&)> func) {
     for(size_t col = 0; col < cols_; ++col) {
         func(col, data_[row][col]);
@@ -80,7 +80,7 @@ Matrix<T>& Matrix<T>::ForRow(size_t row, std::function<void(size_t, T&)> func) {
     return *this;
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T>& Matrix<T>::ForColumn(size_t col, std::function<void(size_t, T&)> func) {
     for(size_t row = 0; row < rows_; ++row) {
         func(row, data_[row][col]);
@@ -88,12 +88,12 @@ Matrix<T>& Matrix<T>::ForColumn(size_t col, std::function<void(size_t, T&)> func
     return *this;
 }
 
-template<arithmetic T, arithmetic U>
+template<class T, class U>
 Matrix<T> operator*(const U scalar, const Matrix<T>& mat) {
     return mat * scalar;
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
     if (rows_ != other.rows_ || cols_ != other.cols_) {
         throw std::length_error("The matrices have different sizes");
@@ -104,7 +104,7 @@ Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
     });
 }
 
-template<arithmetic T>
+template<class T>
 T Matrix<T>::Trace() const noexcept {
     T result = 0;
     for(size_t i = 0; i < std::min(rows_, cols_); ++i) {
@@ -113,7 +113,7 @@ T Matrix<T>::Trace() const noexcept {
     return result;
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T> Matrix<T>::Transposed() const noexcept {
     Matrix<T> mat(cols_, rows_);
     return mat.ForEach([&](size_t i, size_t j, T& elem) {
@@ -121,7 +121,7 @@ Matrix<T> Matrix<T>::Transposed() const noexcept {
     });
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
     if (cols_ != other.rows_) {
         throw std::length_error("The number of columns in the first matrix must match the number of rows in the second");
@@ -136,7 +136,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
     });
 }
 
-template<arithmetic T>
+template<class T>
 Matrix<T> pow(const Matrix<T>& matrix, size_t power) {
     if (matrix.rows_ != matrix.cols_) {
         throw std::length_error("Only square matrices can be raised to a power");

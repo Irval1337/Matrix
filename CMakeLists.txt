@@ -8,4 +8,6 @@ add_executable(Matrix main.cpp
         Matrix.h
         LinearEquationSystem.cpp
         LinearEquationSystem.h
+        Large.cpp
+        Large.h
 )

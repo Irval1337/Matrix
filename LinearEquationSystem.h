@@ -1,41 +1,40 @@
 #pragma once
 
 #include "Matrix.t.h"
+#include "Large.h"
 #include <numeric>
 #include <utility>
 #include <cstdint>
 
 struct ExpressionPart {
-    double coeff;
+    Large coeff;
     int32_t var_index;
-    ExpressionPart(double coeff_, int32_t var_index_) : coeff(coeff_), var_index(var_index_) { }
+    ExpressionPart(Large coeff_, int32_t var_index_) : coeff(std::move(coeff_)), var_index(var_index_) { }
 };
 
 struct LinearSolution {
     ExpressionPart variable;
     std::vector<ExpressionPart> expression;
 
-    explicit LinearSolution(double coeff, int32_t ind) : variable(coeff, ind) { }
+    explicit LinearSolution(Large coeff, int32_t ind) : variable(std::move(coeff), ind) { }
 };
 
-class LinearEquationSystem : Matrix<double> {
+class LinearEquationSystem : Matrix<Large> {
 public:
-    const double EPS = 1e-7;
-
-    LinearEquationSystem(const Matrix<double>& ratio, const Matrix<double>& rcol) :
-        Matrix<double>(ratio.rows(), ratio.columns() + 1) {
-        ForEach([&](size_t i, size_t j, double& elem) {
+    LinearEquationSystem(const Matrix<Large>& ratio, const Matrix<Large>& rcol) :
+        Matrix<Large>(ratio.rows(), ratio.columns() + 1) {
+        ForEach([&](size_t i, size_t j, Large& elem) {
             elem = j < ratio.columns() ? ratio(i, j) : rcol(i, 0);
         });
     }
 
-    [[nodiscard]] Matrix<double> GetRatio() const noexcept;
+    [[nodiscard]] Matrix<Large> GetRatio() const noexcept;
 
-    [[nodiscard]] Matrix<double> GetColumn() const noexcept;
+    [[nodiscard]] Matrix<Large> GetColumn() const noexcept;
 
     void Solve() noexcept;
 
-    std::vector<LinearSolution> GetSolutions() const noexcept;
+    [[nodiscard]] std::vector<LinearSolution> GetSolutions() const noexcept;
 
     friend std::ostream& operator<<(std::ostream& out, const LinearEquationSystem& les);
 private:
@@ -47,11 +46,10 @@ private:
 
     void SimplifyRow(size_t row) noexcept;
 
-    [[nodiscard]] bool IsZero(const double& val) const noexcept {
-        return std::abs(val) <= EPS;
-    }
-
-    [[nodiscard]] bool IsInteger(const double& val) const noexcept {
-        return IsZero(val - static_cast<int32_t>(val));
+    [[nodiscard]] Large gcd(const Large& a, const Large& b) const noexcept {
+        if (b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
     }
 };

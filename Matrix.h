@@ -5,9 +5,7 @@
 #include <iostream>
 #include <functional>
 
-template <typename T> concept arithmetic = std::is_arithmetic_v<T>;
-
-template<arithmetic T>
+template<class T>
 class Matrix {
 public:
 #pragma region Constructors
@@ -32,7 +30,7 @@ public:
 
     Matrix(const Matrix<T>& other) : data_(other.data_), rows_(other.rows_), cols_(other.cols_) {}
 
-    template<arithmetic U>
+    template<class U>
     Matrix(const Matrix<U>& other) : rows_(other.rows()), cols_(other.columns()) {
         data_.resize(rows_);
         for(size_t i = 0; i < rows_; ++i) {
@@ -92,7 +90,7 @@ public:
         return *this;
     }
 
-    template<arithmetic U>
+    template<class U>
     Matrix<T> operator*(U scalar) const noexcept {
         Matrix<T> mat = *this;
         return mat.ForEach([&](size_t i, size_t j, T& elem) {
@@ -156,16 +154,16 @@ public:
     Matrix<T> Transposed() const noexcept;
 
 #pragma Friends
-    template<arithmetic U, arithmetic V>
+    template<class U, class V>
     friend Matrix<U> operator*(V scalar, const Matrix<U>& mat);
 
-    template<arithmetic U>
+    template<class U>
     friend void swap(Matrix<U>& lhs, Matrix<U>& rhs);
 
-    template<arithmetic U>
+    template<class U>
     friend std::ostream& operator<<(std::ostream& out, const Matrix<U>& matrix);
 
-    template<arithmetic U>
+    template<class U>
     friend Matrix<U> pow(const Matrix<U>& matrix, size_t power);
 #pragma endregion
 
