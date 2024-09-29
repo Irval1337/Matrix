@@ -128,7 +128,7 @@ Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
     }
     Matrix<T> mat(rows_, other.cols_);
     return mat.ForEach([&](size_t i, size_t j, T& elem) {
-       size_t value = 0;
+       T value = 0;
        for(size_t k = 0; k < cols_; ++k) {
            value += data_[i][k] * other.data_[k][j];
        }
