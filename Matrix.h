@@ -163,8 +163,8 @@ public:
     template<class U>
     friend std::ostream& operator<<(std::ostream& out, const Matrix<U>& matrix);
 
-    template<class U>
-    friend Matrix<U> pow(const Matrix<U>& matrix, size_t power);
+    template<class V, class U>
+    friend Matrix<V> pow(const Matrix<V>& matrix, const U& power);
 #pragma endregion
 
 protected:

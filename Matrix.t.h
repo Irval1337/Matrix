@@ -45,7 +45,7 @@ std::ostream& operator<<(std::ostream& out, const Matrix<T>& matrix) {
     int need_width = 0;
     for(const auto& row : matrix.data_) {
         for(const auto& element : row) {
-            need_width = std::max(need_width, (int)std::format("{}", element).size());
+            need_width = std::max(need_width, static_cast<int>(to_string(element).size()));
         }
     }
     for (size_t i = 0; i < matrix.data_.size(); ++i) {
@@ -136,21 +136,21 @@ Matrix<T> Matrix<T>::operator*(const Matrix& other) const {
     });
 }
 
-template<class T>
-Matrix<T> pow(const Matrix<T>& matrix, size_t power) {
+template<class T, class U>
+Matrix<T> pow(const Matrix<T>& matrix, const U& power) {
     if (matrix.rows_ != matrix.cols_) {
         throw std::length_error("Only square matrices can be raised to a power");
     }
     if (power == 0) {
         Matrix<T> mat = Matrix<T>(matrix.rows_, matrix.rows_);
         for(size_t i = 0; i < matrix.rows_; ++i) {
-            matrix.data_[i][i] = 1;
+            mat.data_[i][i] = 1;
         }
         return mat;
     }
-    if (power & 1) {
+    if (power % 2 == 1) {
         return matrix * pow(matrix, power - 1);
     }
-    Matrix<int> tmp = pow(matrix, power >> 1);
+    Matrix<T> tmp = pow(matrix, power / 2);
     return tmp * tmp;
 }
