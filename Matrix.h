@@ -153,7 +153,7 @@ public:
 
     Matrix<T> Transposed() const noexcept;
 
-#pragma Friends
+#pragma region Friends
     template<class U, class V>
     friend Matrix<U> operator*(V scalar, const Matrix<U>& mat);
 
